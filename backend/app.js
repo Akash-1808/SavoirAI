@@ -1,10 +1,12 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv"
 import cookieParser from "cookie-parser";
-import authRoutes from "./src/routes/authRoutes.js";
-import mongoose from mongoose;
+import { authRoute } from "./routes/auth.js";
 
+import mongoose from "mongoose"
 
+const app = express();
 
 const connectDB = async () => {
     try{
@@ -21,8 +23,9 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 
-app.use("/api/candidates", candidateRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/api/auth",authRoute)
+// app.use("/api/candidates", candidateRoutes);
+// app.use("/api/auth", authRoutes);
 
 
 

@@ -19,7 +19,13 @@ const connectDB = async () => {
         console.log(err)
     }
 }
-axios.get("http://localhost:5000", { withCredentials: true });
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
 
 dotenv.config()
 app.use(express.json());

@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { authRoute } from "./routes/auth.js";
 import {userRoute} from "./routes/userRoute.js"
 
+
 import mongoose from "mongoose"
 
 const app = express();
@@ -18,6 +19,7 @@ const connectDB = async () => {
         console.log(err)
     }
 }
+axios.get("http://localhost:5000", { withCredentials: true });
 
 dotenv.config()
 app.use(express.json());

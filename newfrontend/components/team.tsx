@@ -34,7 +34,7 @@ const members = [
     {
         name: 'Vikram ',
         role: 'Visual Designer',
-        avatar: '/vikram.jpg',
+        avatar: '/vikram1.jpeg',
         link: '#',
     },
 ]

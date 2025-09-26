@@ -2,37 +2,37 @@ import Link from 'next/link'
 
 const members = [
     {
-        name: 'Liam Brown',
-        role: 'Founder - CEO',
-        avatar: 'https://alt.tailus.io/images/team/member-one.webp',
+        name: 'Radhika Chauhan',
+        role: 'Leader',
+        avatar: '/radhika.jpeg',
         link: '#',
     },
     {
-        name: 'Elijah Jones',
-        role: 'Co-Founder - CTO',
-        avatar: 'https://alt.tailus.io/images/team/member-two.webp',
+        name: 'Abhay Mishra',
+        role: 'Backend Developer',
+        avatar: '/abhay.jpeg',
         link: '#',
     },
     {
-        name: 'Isabella Garcia',
-        role: 'Sales Manager',
-        avatar: 'https://alt.tailus.io/images/team/member-three.webp',
+        name: 'Akash',
+        role: 'Frontend Developer',
+        avatar: '/akash.jpeg',
         link: '#',
     },
     {
-        name: 'Henry Lee',
-        role: 'UX Engeneer',
-        avatar: 'https://alt.tailus.io/images/team/member-four.webp',
+        name: 'Aditi Soni',
+        role: 'ML Engineer',
+        avatar: '/aditi.jpeg',
         link: '#',
     },
     {
-        name: 'Ava Williams',
-        role: 'Interaction Designer',
-        avatar: 'https://alt.tailus.io/images/team/member-five.webp',
+        name: 'Raman',
+        role: 'Backend Developer',
+        avatar: '/raman.jpeg',
         link: '#',
     },
     {
-        name: 'Olivia Miller',
+        name: 'Vikram ',
         role: 'Visual Designer',
         avatar: 'https://alt.tailus.io/images/team/member-six.webp',
         link: '#',
@@ -49,7 +49,7 @@ export default function TeamSection() {
                         <h2 className="text-3xl font-bold sm:text-4xl">Our dream team</h2>
                     </div>
                     <div className="mt-6 sm:mt-0">
-                        <p>During the working process, we perform regular fitting with the client because he is the only person who can feel whether a new suit fits or not.</p>
+                        <p>Our team works closely with projects through regular check-ins and feedback sessions, ensuring that the final outcome truly matches their needs and expectations.</p>
                     </div>
                 </div>
                 <div className="mt-12 md:mt-24">
@@ -72,12 +72,7 @@ export default function TeamSection() {
                                     </div>
                                     <div className="mt-1 flex items-center justify-between">
                                         <span className="text-muted-foreground inline-block translate-y-6 text-sm opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">{member.role}</span>
-                                        <Link
-                                            href={member.link}
-                                            className="group-hover:text-primary-600 dark:group-hover:text-primary-400 inline-block translate-y-8 text-sm tracking-wide opacity-0 transition-all duration-500 hover:underline group-hover:translate-y-0 group-hover:opacity-100">
-                                            {' '}
-                                            Linktree
-                                        </Link>
+                                        
                                     </div>
                                 </div>
                             </div>

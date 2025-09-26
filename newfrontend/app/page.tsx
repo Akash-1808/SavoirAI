@@ -1,4 +1,5 @@
 import Features from "@/components/features-1";
+import FooterSection from "@/components/footer";
 import HeroSection from "@/components/hero-section";
 import IntegrationsSection from "@/components/integrations-3";
 import StatsSection from "@/components/stats";
@@ -13,6 +14,7 @@ export default function Home() {
      <IntegrationsSection />
      <StatsSection/>
       <TeamSection />
+      <FooterSection/>
     </div>
   );
 }

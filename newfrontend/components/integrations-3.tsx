@@ -49,7 +49,7 @@ export default function IntegrationsSection() {
                         </div>
                         <div className="mx-auto mt-6 max-w-lg space-y-6 text-center sm:mt-0 sm:text-left">
                             <h2 className="text-balance text-3xl font-semibold md:text-4xl">Integrate with your favorite tools</h2>
-                            <p className="text-muted-foreground">Connect seamlessly with popular platforms and services to enhance your workflow.</p>
+                            <p className="text-muted-foreground">Power up the tools you already love. Connect Savoir AI to Slack, Google Drive, Notion, and 100+ apps to turn every platform into your AI-powered command center.</p>
 
                             <Button
                                 variant="outline"

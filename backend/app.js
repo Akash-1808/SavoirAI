@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser";
 import { authRoute } from "./routes/auth.js";
+import {userRoute} from "./routes/userRoute.js"
 
 import mongoose from "mongoose"
 
@@ -24,8 +25,8 @@ app.use(cors());
 app.use(cookieParser());
 
 app.use("/api/auth",authRoute)
-// app.use("/api/candidates", candidateRoutes);
-// app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoute);
+
 
 
 

@@ -34,7 +34,7 @@ const members = [
     {
         name: 'Vikram ',
         role: 'Visual Designer',
-        avatar: 'https://alt.tailus.io/images/team/member-six.webp',
+        avatar: '/vikram.jpg',
         link: '#',
     },
 ]

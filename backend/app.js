@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { authRoute } from "./routes/auth.js";
 import {userRoute} from "./routes/userRoute.js"
 
+
 import mongoose from "mongoose"
 
 const app = express();
@@ -18,6 +19,13 @@ const connectDB = async () => {
         console.log(err)
     }
 }
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
 
 dotenv.config()
 app.use(express.json());

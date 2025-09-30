@@ -3,10 +3,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
-import { useState } from 'react'
-import { Form, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { email, z } from "zod"
+import { z } from "zod"
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 interface LoginForm {
     email: string
@@ -19,6 +22,14 @@ const formSchema = z.object({
 })
 
 export default function LoginPage() {
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [rememberMe, setRememberMe] = useState(false)
+    const router = useRouter()
+    
+    
+    // Security hooks
+    
     
     const form = useForm<LoginForm>({
         resolver: zodResolver(formSchema),
@@ -28,15 +39,92 @@ export default function LoginPage() {
         }
     })
 
-    const onSubmit = (data: LoginForm) => {
-        console.log(data)
+    // Form persistence - only persist email if remember me is checked
+   
+
+    // Redirect if already authenticated
+   
+
+    // Load remember me preference and email
+    useEffect(() => {
+        const savedRememberMe = localStorage.getItem('rememberMe') === 'true'
+        setRememberMe(savedRememberMe)
+        
+        if (savedRememberMe) {
+            const savedEmail = localStorage.getItem('savedEmail')
+            if (savedEmail) {
+                form.setValue('email', savedEmail)
+            }
+        }
+    }, [form])
+
+    const onSubmit = async (data: LoginForm) => {
+        setIsLoading(true)
+        setError(null)
+        
+        try {
+            const response = await axios.post("http://localhost:5000/api/auth/login", {
+                email: data.email,
+                password: data.password
+            }, {
+                withCredentials: true
+            })
+            
+            // Save user data to localStorage
+            localStorage.setItem('user', JSON.stringify(response.data))
+            localStorage.setItem('isLoggedIn', 'true')
+            // Save user preferences
+            if (rememberMe) {
+                localStorage.setItem('rememberMe', 'true')
+                localStorage.setItem('savedEmail', data.email)
+            } else {
+                localStorage.removeItem('rememberMe')
+                localStorage.removeItem('savedEmail')
+                form.reset()
+            }
+            
+            // Record successful login for security
+            
+            
+            // Save login timestamp and basic session info
+            localStorage.setItem('lastLoginTime', new Date().toISOString())
+            localStorage.setItem('loginMethod', 'email')
+            
+            // Redirect to dashboard or home page
+            router.push('/dashboard')
+            
+        } catch (err: any) {
+            console.error('Login error:', err)
+            
+            if (err.response) {
+                // Handle specific API errors
+                switch (err.response.status) {
+                    case 404:
+                        setError('User not found. Please check your email.')
+                        break
+                    case 401:
+                        setError('Invalid password. Please try again.')
+                        break
+                    case 500:
+                        setError('Server error. Please try again later.')
+                        break
+                    default:
+                        setError(err.response.data || 'An error occurred during login')
+                }
+            } else {
+                setError('Network error. Please check your connection and try again.')
+            }
+        } finally {
+            setIsLoading(false)
+        }
     }
     
     return (
+    
         <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
             <Form {...form}>
             <form 
-                action=""
+                onSubmit={form.handleSubmit(onSubmit)}
                 className="bg-muted m-auto h-fit w-full max-w-sm overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
                 <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
                     <div className="text-center">
@@ -50,49 +138,88 @@ export default function LoginPage() {
                         <p className="text-sm">Welcome back! Sign in to continue</p>
                     </div>
 
-                    <div className="mt-6 space-y-6">
-                        <div className="space-y-2">
-                            <Label
-                                htmlFor="email"
-                                className="block text-sm">
-                                Username
-                            </Label>
-                            <Input
-                                type="email"
-                                required
-                                name="email"
-                                id="email"
-                            />
+                    {error && (
+                        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                            <p className="text-sm text-red-600">{error}</p>
                         </div>
+                    )}
+
+                    <div className="mt-6 space-y-6">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="block text-sm">Email</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
                         <div className="space-y-0.5">
                             <div className="flex items-center justify-between">
-                                <Label
-                                    htmlFor="pwd"
-                                    className="text-sm">
-                                    Password
-                                </Label>
-                                <Button
-                                    asChild
-                                    variant="link"
-                                    size="sm">
-                                    <Link
-                                        href="#"
-                                        className="link intent-info variant-ghost text-sm">
-                                        Forgot your Password ?
-                                    </Link>
-                                </Button>
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <div className="flex items-center justify-between">
+                                                <FormLabel className="text-sm">Password</FormLabel>
+                                                <Button
+                                                    asChild
+                                                    variant="link"
+                                                    size="sm"
+                                                    type="button">
+                                                    <Link
+                                                        href="#"
+                                                        className="link intent-info variant-ghost text-sm">
+                                                        Forgot your Password ?
+                                                    </Link>
+                                                </Button>
+                                            </div>
+                                            <FormControl>
+                                                <Input
+                                                    type="password"
+                                                    placeholder="Enter your password"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
-                            <Input
-                                type="password"
-                                required
-                                name="pwd"
-                                id="pwd"
-                                className="input sz-md variant-mixed"
-                            />
                         </div>
 
-                        <Button className="w-full">Sign In</Button>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    id="rememberMe"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                />
+                                <Label htmlFor="rememberMe" className="text-sm">
+                                    Remember me
+                                </Label>
+                            </div>
+                        </div>
+
+                        <Button 
+                            type="submit" 
+                            className="w-full"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Signing In...' : 'Sign In'}
+                        </Button>
                     </div>
 
                     <div className="my-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">

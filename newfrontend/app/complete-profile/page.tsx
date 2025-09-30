@@ -5,7 +5,7 @@ import { div } from "motion/react-client";
 
 export default function CompleteProfile() {
   const [skills, setSkills] = useState([]);
-  const [interests, setInterests] = useState([]);
+  const [interests, setInterests ] = useState([]);
   const [location, setLocation] = useState("");
   const [education, setEducation] = useState([
     { level: "10th", institution: "", year: 0, percentage: 0 , skills: ""},

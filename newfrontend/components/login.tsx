@@ -3,12 +3,39 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
+import { useState } from 'react'
+import { Form, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { email, z } from "zod"
+
+interface LoginForm {
+    email: string
+    password: string
+}
+
+const formSchema = z.object({
+    email: z.string().min(1, "Email is required").email("Invalid email address"),
+    password: z.string().min(1, "Password is required").min(6, "Password must be at least 6 characters")
+})
 
 export default function LoginPage() {
     
+    const form = useForm<LoginForm>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: '',
+            password: ''
+        }
+    })
+
+    const onSubmit = (data: LoginForm) => {
+        console.log(data)
+    }
+    
     return (
         <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
-            <form
+            <Form {...form}>
+            <form 
                 action=""
                 className="bg-muted m-auto h-fit w-full max-w-sm overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
                 <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
@@ -136,6 +163,7 @@ export default function LoginPage() {
                     </p>
                 </div>
             </form>
+            </Form>
         </section>
     )
 }
